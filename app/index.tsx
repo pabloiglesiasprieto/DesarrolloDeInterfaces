@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "#000",
     borderRadius: 20,
-    borderWidth: 2
+    borderWidth: 2,
+    backgroundColor: "#5d5c5f"
 
   },
 
@@ -14,8 +15,8 @@ const styles = StyleSheet.create({
   image: {
 
     marginTop:20,
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderColor: "#000",
     borderWidth: 3, 
     borderRadius: 200
@@ -24,15 +25,25 @@ const styles = StyleSheet.create({
 
   text: {
     
-    fontSize: 40
+    fontSize: 30,
+    color: "white",
+    fontWeight: "bold"
+
 
   }
 })
 export default function Index() {
   return (
+    <View>
     <View style={styles.card}>
       <Image style={styles.image} source={{uri:"https://media.tenor.com/cO1cM7re22MAAAAM/sherma-silksong.gif"}}></Image>
       <Text style={styles.text}>Sherma</Text>
+    </View>
+
+    <View style={styles.card}>
+      <Image style={styles.image} source={{uri:"https://media.tenor.com/cO1cM7re22MAAAAM/sherma-silksong.gif"}}></Image>
+      <Text style={styles.text}>Sherma</Text>
+    </View>
     </View>
   );
   }
