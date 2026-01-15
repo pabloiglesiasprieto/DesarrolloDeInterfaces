@@ -1,6 +1,6 @@
 export default class BaseAPI {
   private readonly BASE_URL: string =
-    "https://crudpablo-cpdzatcbfch5g4gj.spaincentral-01.azurewebsites.net/API/Personas";
+    "https://pokeapi.co/api/v2/pokemon?limit=20&offset=";
 
   public getApiUrl(endpoint: string): string {
     const url = new URL(endpoint, this.BASE_URL);
@@ -10,7 +10,6 @@ export default class BaseAPI {
   public getDefaultHeaders(): HeadersInit {
     return {
       "Content-Type": "application/json",
-      // Puedes añadir aqui otros headers (ej. Authorization)
     };
   }
 }

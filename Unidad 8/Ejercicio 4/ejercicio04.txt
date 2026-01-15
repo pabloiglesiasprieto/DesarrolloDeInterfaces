@@ -1,0 +1,188 @@
+# ANÁLISIS EJERCICIO 4
+
+## Descripción General
+Desarrollo de una aplicación completa para la gestión (CRUD) de **Departamentos** y **Personas**.
+
+## Arquitectura y Diseño
+*   **Arquitectura:** Clean Architecture.
+*   **Patrón de Diseño:** MVVM (Model-View-ViewModel).
+*   **Navegación:** Uso de **Drawer** para acceder a los listados.
+
+## Vistas Requeridas
+1.  **Bienvenida:** Vista inicial de carga (opcional).
+2.  **ListadoPersonas:** Visualización con capacidad de filtrado y búsqueda.
+3.  **EditarInsertarPersonas:** Formulario para añadir (vacío) o editar (datos precargados mediante VM).
+4.  **ListadoDepartamentos:** Visualización con capacidad de filtrado y búsqueda.
+5.  **EditarInsertarDepartamento:** Formulario para añadir o editar departamentos.
+
+## Capa de Datos
+*   Implementación de todas las funcionalidades CRUD.
+*   Conexión con una **API alojada en Azure** para personas y departamentos.
+
+## Reglas de Negocio (Casos de Uso)
+*   **Viernes y Sábados:** El listado solo mostrará personas con edad mayor a 18 años.
+*   **Domingos:** No está permitido realizar la acción de eliminar personas.
+
+## Funcionalidades Extra (Plus)
+*   **Gestión de Fotos:** Visualización de imágenes al seleccionar una persona y edición de su URL.
+*   **Azure Storage:** Investigación e implementación de subida de fotos mediante cuentas de almacenamiento en Azure.
+
+domain:
+    entities:
+        Departamento.ts
+            public class Departamento
+                private _id: number
+                private _nombre: string
+
+                get id(): number
+                get nombre(): string
+                set nombre(value: string)
+
+        Persona.ts
+            public class Persona
+                private _id: number
+                private _nombre: string
+                private _apellido: string
+                private _fechaNacimiento: string
+                private _direccion: string
+                private _telefono: string
+                private _foto: string
+                private _departamentoId: number
+
+                get id(): number
+                get nombre(): string
+                set nombre(value: string)
+                get apellido(): string
+                set apellido(value: string)
+                get fechaNacimiento(): string
+                set fechaNacimiento(value: string)
+                get direccion(): string
+                set direccion(value: string)
+                get telefono(): string
+                set telefono(value: string)
+                get foto(): string
+                set foto(value: string)
+                get departamentoId(): number
+                set departamentoId(value: number)
+                
+    interfaces:
+        repositories:
+            IDepartamentosRepository.ts
+                public interface IDepartamentosRepository
+                    public getDepartamentos(): Promise<Departamento[]>
+                    public getDepartamento(id: number): Promise<Departamento>
+                    public addDepartamento(departamento: Departamento): Promise<void>
+                    public updateDepartamento(departamento: Departamento): Promise<void>
+                    public deleteDepartamento(id: number): Promise<void>
+
+            IPersonasRepository.ts
+                public interface IPersonasRepository
+                    public getPersonas(): Promise<Persona[]>
+                    public getPersona(id: number): Promise<Persona>
+                    public addPersona(persona: Persona): Promise<void>
+                    public updatePersona(persona: Persona): Promise<void>
+                    public deletePersona(id: number): Promise<void>
+        
+        useCases:
+            IDepartamentosUseCases.ts
+                public interface IDepartamentosUseCases
+                    public getDepartamentos(): Promise<Departamento[]>
+                    public getDepartamento(id: number): Promise<Departamento>
+                    public addDepartamento(departamento: Departamento): Promise<void>
+                    public updateDepartamento(departamento: Departamento): Promise<void>
+                    public deleteDepartamento(id: number): Promise<void>
+            
+            IPersonasUseCases.ts
+                public interface IPersonasUseCases
+                    public getPersonas(): Promise<Persona[]>
+                    public getPersona(id: number): Promise<Persona>
+                    public addPersona(persona: Persona): Promise<void>
+                    public updatePersona(persona: Persona): Promise<void>
+                    public deletePersona(id: number): Promise<void>
+        
+    useCases:
+        DepartamentosUseCases.ts
+            public class DepartamentosUseCases implements IDepartamentosUseCases
+                constructor(@inject departamentoRepository: IDepartamentosRepository)
+                public getDepartamentos(): Promise<Departamento[]>
+                public getDepartamento(id: number): Promise<Departamento>
+                public addDepartamento(departamento: Departamento): Promise<void>
+                public updateDepartamento(departamento: Departamento): Promise<void>
+                public deleteDepartamento(id: number): Promise<void>
+        
+        PersonasUseCases.ts
+            public class PersonasUseCases implements IPersonasUseCases
+                constructor(@inject personaRepository: IPersonasRepository)
+                public getPersonas(): Promise<Persona[]>
+                public getPersona(id: number): Promise<Persona>
+                public addPersona(persona: Persona): Promise<void>
+                public updatePersona(persona: Persona): Promise<void>
+                public deletePersona(id: number): Promise<void>
+
+data:
+    api:
+        APIConexion.ts
+            public static class BaseApi 
+                public static baseUrl: string (https://crudpablo-cpdzatcbfch5g4gj.spaincentral-01.azurewebsites.net/API/)
+                constructor(tabla : string)
+                public get getAPIConexion(): string 
+    
+    repositories:
+        DepartamentosRepository.ts
+            public class DepartamentosRepository implements IDepartamentosRepository
+                public getDepartamentos(): Promise<Departamento[]>
+                public getDepartamento(id: number): Promise<Departamento>
+                public addDepartamento(departamento: Departamento): Promise<void>
+                public updateDepartamento(departamento: Departamento): Promise<void>
+                public deleteDepartamento(id: number): Promise<void>
+
+        PersonasRepository.ts
+            public class PersonasRepository implements IPersonasRepository
+                public getPersonas(): Promise<Persona[]>
+                public getPersona(id: number): Promise<Persona>
+                public addPersona(persona: Persona): Promise<void>
+                public updatePersona(persona: Persona): Promise<void>
+                public deletePersona(id: number): Promise<void>
+
+app:
+    views:
+        Bienvenida.tsx
+        ListadoDepartamentos.tsx
+        ListadoPersonas.tsx
+        EditarInsertarDepartamento.tsx
+        EditarInsertarPersona.tsx
+
+    viewmodels:
+        DepartamentosViewModel.ts
+            public class DepartamentosViewModel
+                private readonly departamentoUseCases: IDepartamentosUseCases;
+                public departamentos: Departamento[] = [];
+                
+                constructor(@inject departamentoUseCases: IDepartamentosUseCases)
+                public getDepartamentos(): Promise<Departamento[]>
+                public getDepartamento(id: number): Promise<Departamento>
+                public addDepartamento(departamento: Departamento): Promise<void>
+                public updateDepartamento(departamento: Departamento): Promise<void>
+                public deleteDepartamento(id: number): Promise<void>
+
+        PersonasViewModel.ts
+            public class PersonasViewModel (singleton)
+                private readonly useCases: IPersonasUseCases;
+                public personas: Persona[] = [];
+                public personaSeleccionada: Persona | null = null;
+                
+                constructor(@inject personaUseCases: IPersonasUseCases)
+
+                public getPersonas(): Promise<Persona[]>
+                public getPersona(id: number): Promise<Persona>
+                public getPersonaSeleccionada(): Persona
+                public getPersonaSeleccionada(persona : Persona): void
+                public addPersona(persona: Persona): Promise<void>
+                public updatePersona(persona: Persona): Promise<void>
+                public deletePersona(id: number): Promise<void>
+
+core:
+    Types.ts
+    Container.ts
+    
+

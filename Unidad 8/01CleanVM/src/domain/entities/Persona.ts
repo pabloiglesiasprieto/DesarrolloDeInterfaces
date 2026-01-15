@@ -4,7 +4,7 @@ export default class Persona {
   private _apellido: string;
   private _direccion: string;
   private _fechaNac: string;
-  private _nombreDepartamento: number;
+  private _nombreDepartamento: string;
   private _imagen: string;
   private _telefono: string;
 
@@ -64,12 +64,12 @@ export default class Persona {
     this._fechaNac = value;
   }
 
-  public get IdDepartamento(): number {
-    return this._idDepartamento;
+  public get nombreDepartamento(): string {
+    return this._nombreDepartamento;
   }
 
-  public set IdDepartamento(value: number) {
-    this._idDepartamento = value;
+  public set nombreDepartamento(value: string) {
+    this._nombreDepartamento = value;
   }
 
   public get Imagen(): string {
@@ -92,7 +92,7 @@ export default class Persona {
   public getFechaNacFormateada(): string {
     if (!this._fechaNac) return "";
     const fecha = new Date(this._fechaNac);
-    return fecha.toLocaleDateString('es-ES');
+    return fecha.toLocaleDateString("es-ES");
   }
 
   // Método helper para obtener edad

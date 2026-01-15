@@ -15,18 +15,20 @@ export class RepositoryPersonasAPI implements IRepositoryPersonasAPI {
     this.api = api;
   }
   async getPersonas(): Promise<Persona[]> {
-    const url = this.api.getApiUrl('personas'); // Endpoint: /api/personas
+    const url = this.api.getApiUrl("personas"); // Endpoint: /api/personas
 
     try {
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: this.api.getDefaultHeaders(),
       });
 
       // 1. Manejo de errores HTTP
       if (!response.ok) {
         // Lanza un error con el estado HTTP (ej: 404, 500)
-        throw new Error(`Fallo en la API: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Fallo en la API: ${response.status} ${response.statusText}`
+        );
       }
 
       // 2. Extracción de datos
